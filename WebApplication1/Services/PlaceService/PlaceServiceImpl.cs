@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 using WebApplication1.DTO;
 using WebApplication1.Models;
 using WebApplication1.Services.CoordinatesService;
@@ -6,44 +8,18 @@ namespace WebApplication1.Services
 {
     public class PlaceServiceImpl : IPlaceService
     {
-        private readonly List<Place> _places;
+        private readonly DataContext _context;
         private readonly ICoordinatesService _coordinatesService;
 
-        public PlaceServiceImpl(ICoordinatesService coordinatesService)
+        public PlaceServiceImpl(DataContext context, ICoordinatesService coordinatesService)
         {
+            _context = context;
             _coordinatesService = coordinatesService;
-            _places = new List<Place>
-            {
-                new Place(
-                    id: "p1",
-                    title: "Place 1",
-                    description: "Description 1",
-                    location: new Location(40.7128, -74.0060),
-                    address: "123 Main St, New York, NY",
-                    creator: "u1"
-                ),
-                new Place(
-                    id: "p2",
-                    title: "Place 2",
-                    description: "Description 2",
-                    location: new Location(34.0522, -118.2437),
-                    address: "456 Elm St, Los Angeles, CA",
-                    creator: "u1"
-                ),
-                new Place(
-                    id: "p3",
-                    title: "Place 3",
-                    description: "Description 3",
-                    location: new Location(51.5074, -0.1278),
-                    address: "789 Oak St, London, UK",
-                    creator: "u3"
-                )
-            };
         }
 
-        public List<Place> GetPlaces()
+        public async Task<List<Place>> GetPlaces()
         {
-            return _places;
+            return await _context.Places.ToListAsync();
         }
 
         public async Task AddPlace(Place place)
@@ -54,21 +30,23 @@ namespace WebApplication1.Services
                 if (geolocationResponse != null)
                 {
                     var location = geolocationResponse;
-                    place.Location = new Location(location.Lat, location.Lng);
+                    place.PlaceLocation = new PlaceLocation(location.Lat, location.Lng);
                 }
             }
 
-            _places.Add(place);
+            // _places.Add(place);
+            _context.Places.Add(place);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdatePlace(string id, Place updatedPlace)
         {
-            var place = _places.FirstOrDefault(p => p.Id == id);
+            var place = await _context.Places.FindAsync(id);
             if (place != null)
             {
                 place.Title = updatedPlace.Title ?? place.Title;
                 place.Description = updatedPlace.Description ?? place.Description;
-                place.Location = updatedPlace.Location ?? place.Location;
+                place.PlaceLocation = updatedPlace.PlaceLocation ?? place.PlaceLocation;
                 place.Address = updatedPlace.Address ?? place.Address;
                 place.Creator = updatedPlace.Creator ?? place.Creator;
 
@@ -78,18 +56,21 @@ namespace WebApplication1.Services
                     if (geolocationResponse != null)
                     {
                         var location = geolocationResponse;
-                        place.Location = new Location(location.Lat, location.Lng);
+                        place.PlaceLocation = new PlaceLocation(location.Lat, location.Lng);
                     }
                 }
+                _context.Places.Update(place);
+                await _context.SaveChangesAsync();
             }
         }
 
-        public void DeletePlace(string id)
+        public async Task DeletePlace(string id)
         {
-            var place = _places.FirstOrDefault(p => p.Id == id);
+            var place = await _context.Places.FindAsync(id);
             if (place != null)
             {
-                _places.Remove(place);
+                _context.Places.Remove(place);
+                await _context.SaveChangesAsync();
             }
         }
     }

@@ -18,16 +18,16 @@ namespace WebApplication1
         }
 
         [HttpGet]
-        public ActionResult<List<Place>> GetAllPlaces()
+        public async Task<ActionResult<List<Place>>> GetAllPlaces()
         {
-            List<Place> places = _placeService.GetPlaces();
+            List<Place> places = await _placeService.GetPlaces();
             return places;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Place> GetPlaceById(string id)
+        public async Task<ActionResult<Place>> GetPlaceById(string id)
         {
-            Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
+            Place? place = (await _placeService.GetPlaces()).FirstOrDefault(p => p.Id == id);
             if (place == null)
             {
                 throw new NotFoundException();
@@ -36,9 +36,9 @@ namespace WebApplication1
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<List<Place>> GetAllPlacesByUserId(string userId)
+        public async Task<ActionResult<List<Place>>> GetAllPlacesByUserId(string userId)
         {
-            List<Place> places = _placeService.GetPlaces().Where(place => place.Creator == userId).ToList();
+            List<Place> places = (await _placeService.GetPlaces()).Where(place => place.Creator == userId).ToList();
             return places;
         }
 
@@ -53,7 +53,7 @@ namespace WebApplication1
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdatePlaceById(string id, [FromBody] Place updatedPlace)
         {
-            Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
+            Place? place = (await _placeService.GetPlaces()).FirstOrDefault(p => p.Id == id);
             if (place == null)
             {
                 throw new NotFoundException();
@@ -63,14 +63,14 @@ namespace WebApplication1
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeletePlaceById(string id)
+        public async Task<ActionResult> DeletePlaceById(string id)
         {
-            Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
+            Place? place = (await _placeService.GetPlaces()).FirstOrDefault(p => p.Id == id);
             if (place == null)
             {
                 throw new NotFoundException();
             }
-            _placeService.DeletePlace(id);
+            await _placeService.DeletePlace(id);
             return NoContent();
         }
     }
