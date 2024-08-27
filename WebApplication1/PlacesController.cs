@@ -43,22 +43,22 @@ namespace WebApplication1
         }
 
         [HttpPost]
-        public ActionResult AddPlace([FromBody] Place place)
+        public async Task<ActionResult> AddPlace([FromBody] Place place)
         {
-            _placeService.AddPlace(place);
+            await _placeService.AddPlace(place);
             // Location Header for HATEOS Principle
             return CreatedAtAction(nameof(GetPlaceById), new { id = place.Id }, place);
         }
 
         [HttpPatch("{id}")]
-        public ActionResult UpdatePlaceById(string id, [FromBody] Place updatedPlace)
+        public async Task<ActionResult> UpdatePlaceById(string id, [FromBody] Place updatedPlace)
         {
             Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
             if (place == null)
             {
                 throw new NotFoundException();
             }
-            _placeService.UpdatePlace(id, updatedPlace);
+            await _placeService.UpdatePlace(id, updatedPlace);
             return Ok(place);
         }
 

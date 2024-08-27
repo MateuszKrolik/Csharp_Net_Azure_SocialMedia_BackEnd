@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using WebApplication1.ExceptionHandlers;
 using WebApplication1.Services;
+using WebApplication1.Services.CoordinatesService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IPlaceService, PlaceServiceImpl>();
+builder.Services.AddHttpClient<ICoordinatesService, CoordinatesServiceImpl>();
 // ExceptionHandlers are called in order of registration
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
-
+builder.Configuration.AddUserSecrets<Program>();
 
 var app = builder.Build();
 
