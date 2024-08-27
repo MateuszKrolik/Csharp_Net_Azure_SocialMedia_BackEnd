@@ -6,7 +6,7 @@ public class Place
 {
     public Place(string? id, string? title, string? description, Location location, string? address, string? creator)
     {
-        Id = id;
+        Id = id ?? Guid.NewGuid().ToString(); // gen uuid4 if id is null
         Title = title;
         Description = description;
         Location = location;

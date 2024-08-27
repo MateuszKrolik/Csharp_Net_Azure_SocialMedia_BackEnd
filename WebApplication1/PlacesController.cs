@@ -36,12 +36,43 @@ namespace WebApplication1
         }
 
         [HttpGet("user/{userId}")]
-        public ActionResult<List<Place>> GetPlacesByUserId(string userId)
+        public ActionResult<List<Place>> GetAllPlacesByUserId(string userId)
         {
             List<Place> places = _placeService.GetPlaces().Where(place => place.Creator == userId).ToList();
             return places;
         }
 
+        [HttpPost]
+        public ActionResult AddPlace([FromBody] Place place)
+        {
+            _placeService.AddPlace(place);
+            // Location Header for HATEOS Principle
+            return CreatedAtAction(nameof(GetPlaceById), new { id = place.Id }, place);
+        }
+
+        [HttpPatch("{id}")]
+        public ActionResult UpdatePlaceById(string id, [FromBody] Place updatedPlace)
+        {
+            Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
+            if (place == null)
+            {
+                throw new NotFoundException();
+            }
+            _placeService.UpdatePlace(id, updatedPlace);
+            return Ok(place);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePlaceById(string id)
+        {
+            Place? place = _placeService.GetPlaces().FirstOrDefault(p => p.Id == id);
+            if (place == null)
+            {
+                throw new NotFoundException();
+            }
+            _placeService.DeletePlace(id);
+            return NoContent();
+        }
     }
 }
 

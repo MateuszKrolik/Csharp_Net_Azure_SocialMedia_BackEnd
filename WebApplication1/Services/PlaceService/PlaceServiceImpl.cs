@@ -42,4 +42,31 @@ public class PlaceServiceImpl : IPlaceService
     {
         return _places;
     }
+
+    public void AddPlace(Place place)
+    {
+        _places.Add(place);
+    }
+
+    public void UpdatePlace(string id, Place updatedPlace)
+    {
+        var place = _places.FirstOrDefault(p => p.Id == id);
+        if (place != null)
+        {
+            place.Title = updatedPlace.Title ?? place.Title;
+            place.Description = updatedPlace.Description ?? place.Description;
+            place.Location = updatedPlace.Location ?? place.Location;
+            place.Address = updatedPlace.Address ?? place.Address;
+            place.Creator = updatedPlace.Creator ?? place.Creator;
+        }
+    }
+
+    public void DeletePlace(string id)
+    {
+        var place = _places.FirstOrDefault(p => p.Id == id);
+        if (place != null)
+        {
+            _places.Remove(place);
+        }
+    }
 }
