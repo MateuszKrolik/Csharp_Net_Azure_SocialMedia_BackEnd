@@ -12,11 +12,22 @@ public class MappingProfiles : Profile
     {
         CreateMap<PlaceDTO, Place>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom<IdResolver>());
+        CreateMap<Place, PlaceDTO>();
+        CreateMap<Place, PlaceUrlDTO>()
+            .ForMember(dest => dest.Lat, opt => opt.MapFrom<PlaceUrlLocationLatResolver>())
+            .ForMember(dest => dest.Lng, opt => opt.MapFrom<PlaceUrlLocationLngResolver>())
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl)); 
         CreateMap<string, Location>()
             .ConvertUsing<GeolocationResponseConverter>();
-
+        CreateMap<ApplicationUser, UserDTO>()
+            .ForMember(dest => dest.Places, opt => opt.MapFrom(src => src.Places));
+        // CreateMap<(List<Place> Places, int CurrentPage, double TotalPages), PlacesResponseDTO>()
+        //     .ForMember(dest => dest.Places, opt => opt.MapFrom(src => src.Places))
+        //     .ForMember(dest => dest.CurrentPage, opt => opt.MapFrom(src => src.CurrentPage))
+        //     .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages));
     }
 }
+
 public class IdResolver : IValueResolver<PlaceDTO, Place, string?>
 {
     public string Resolve(PlaceDTO source, Place destination, string? destMember, ResolutionContext context)
@@ -44,5 +55,20 @@ public class GeolocationResponseConverter : ITypeConverter<string, Location>
         }
 
         return geolocationResponse.Results[0].Geometry.Location;
+    }
+}
+public class PlaceUrlLocationLatResolver : IValueResolver<Place, PlaceUrlDTO, double?>
+{
+    public double? Resolve(Place source, PlaceUrlDTO destination, double? destMember, ResolutionContext context)
+    {
+        return source.PlaceLocation?.Lat;
+    }
+}
+
+public class PlaceUrlLocationLngResolver : IValueResolver<Place, PlaceUrlDTO, double?>
+{
+    public double? Resolve(Place source, PlaceUrlDTO destination, double? destMember, ResolutionContext context)
+    {
+        return source.PlaceLocation?.Lng;
     }
 }

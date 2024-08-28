@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
 namespace WebApplication1.Data;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<ApplicationUser>
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -13,7 +14,15 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Place>().OwnsOne(p => p.PlaceLocation);
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Place>()
+            .OwnsOne(place => place.PlaceLocation);
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany(user => user.Places)
+            .WithOne() // 1:n
+            .HasForeignKey(place => place.Creator);
     }
 
 }
