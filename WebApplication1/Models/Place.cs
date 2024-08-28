@@ -1,21 +1,19 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using WebApplication1.DTO;
 
 namespace WebApplication1.Models;
 
 public class Place
 {
     public Place() { }
-    public Place(string? id, string? title, string? description, PlaceLocation placeLocation, string? address, string? creator)
+    public Place(string? id, string? title, string? description, PlaceLocation placeLocation, string? address, string? creator, string? imageUrl)
     {
         Id = id ?? Guid.NewGuid().ToString(); // gen uuid4 if id is null
-        // validate required title 
         Title = title;
         Description = description;
         PlaceLocation = placeLocation;
         Address = address;
         Creator = creator;
+        ImageUrl = imageUrl;
     }
 
     public string? Id { get; set; }
@@ -26,6 +24,6 @@ public class Place
     public PlaceLocation? PlaceLocation { get; set; }
     [Required(ErrorMessage = "Address is required")]
     public string? Address { get; set; }
-
     public string? Creator { get; set; }
+    public string? ImageUrl { get; set; }
 }

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.ExceptionHandlers;
 using WebApplication1.Services;
 using WebApplication1.Services.CoordinatesService;
+using WebApplication1.Services.ImageService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +24,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IImageService, ImageServiceImpl>();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Configuration.AddUserSecrets<Program>();
 
 var app = builder.Build();
