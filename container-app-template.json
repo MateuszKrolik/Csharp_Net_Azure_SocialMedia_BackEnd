@@ -1,0 +1,84 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "GoogleMaps__ApiKey": {
+      "type": "string"
+    },
+    "AzureBlobStorage__ConnectionString": {
+      "type": "string"
+    },
+    "AzureBlobStorage__PlacesContainerName": {
+      "type": "string"
+    },
+    "ConnectionStrings__DefaultConnection": {
+      "type": "string"
+    },
+    "EmailSettings__PostmarkApiKey": {
+      "type": "string"
+    },
+    "EmailSettings__FromEmail": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2024-03-01",
+      "name": "mkrolik-places",
+      "location": "Germany West Central",
+      "properties": {
+        "managedEnvironmentId": "/subscriptions/d019786f-a8b2-4a34-b7dd-9a55e2832402/resourceGroups/DefaultResourceGroup-DEWC/providers/Microsoft.App/managedEnvironments/managedEnvironment-DefaultResource-bb1a",
+        "configuration": {
+          "ingress": {
+            "external": true,
+            "targetPort": 8080
+          }
+        },
+        "template": {
+          "containers": [
+            {
+              "name": "mkrolik-places",
+              "image": "docker.io/mateuszkrolik/places-social-media:latest",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1Gi",
+                "ephemeralStorage": "2Gi"
+              },
+              "env": [
+                {
+                  "name": "GoogleMaps__ApiKey",
+                  "value": "[parameters('GoogleMaps__ApiKey')]"
+                },
+                {
+                  "name": "AzureBlobStorage__ConnectionString",
+                  "value": "[parameters('AzureBlobStorage__ConnectionString')]"
+                },
+                {
+                  "name": "AzureBlobStorage__PlacesContainerName",
+                  "value": "[parameters('AzureBlobStorage__PlacesContainerName')]"
+                },
+                {
+                  "name": "ConnectionStrings__DefaultConnection",
+                  "value": "[parameters('ConnectionStrings__DefaultConnection')]"
+                },
+                {
+                  "name": "EmailSettings__PostmarkApiKey",
+                  "value": "[parameters('EmailSettings__PostmarkApiKey')]"
+                },
+                {
+                  "name": "EmailSettings__FromEmail",
+                  "value": "[parameters('EmailSettings__FromEmail')]"
+                }
+              ]
+            }
+          ],
+          "scale": {
+            "minReplicas": 0,
+            "maxReplicas": 10
+          }
+        }
+      }
+    }
+  ]
+}

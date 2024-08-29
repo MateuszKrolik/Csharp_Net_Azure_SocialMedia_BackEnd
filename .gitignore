@@ -430,3 +430,4 @@ Temporary Items
 
 # Secrets
 .env
+parameters.json
