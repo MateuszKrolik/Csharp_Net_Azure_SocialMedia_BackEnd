@@ -16,15 +16,11 @@ public class MappingProfiles : Profile
         CreateMap<Place, PlaceUrlDTO>()
             .ForMember(dest => dest.Lat, opt => opt.MapFrom<PlaceUrlLocationLatResolver>())
             .ForMember(dest => dest.Lng, opt => opt.MapFrom<PlaceUrlLocationLngResolver>())
-            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl)); 
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
         CreateMap<string, Location>()
             .ConvertUsing<GeolocationResponseConverter>();
         CreateMap<ApplicationUser, UserDTO>()
             .ForMember(dest => dest.Places, opt => opt.MapFrom(src => src.Places));
-        // CreateMap<(List<Place> Places, int CurrentPage, double TotalPages), PlacesResponseDTO>()
-        //     .ForMember(dest => dest.Places, opt => opt.MapFrom(src => src.Places))
-        //     .ForMember(dest => dest.CurrentPage, opt => opt.MapFrom(src => src.CurrentPage))
-        //     .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages));
     }
 }
 

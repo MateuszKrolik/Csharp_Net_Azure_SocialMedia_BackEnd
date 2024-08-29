@@ -22,7 +22,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(user => user.Places)
             .WithOne() // 1:n
-            .HasForeignKey(place => place.Creator);
+            .HasForeignKey(place => place.Creator)
+            .OnDelete(DeleteBehavior.Cascade); // deleting user deletes all their places
     }
-
 }

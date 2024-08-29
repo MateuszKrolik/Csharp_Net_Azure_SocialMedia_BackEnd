@@ -129,12 +129,7 @@
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll
-/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll
-/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/unix/lib/net6.0/System.Drawing.Common.dll
-/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Runtime.Caching.dll
-/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
-/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Azure.Storage.Blobs.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Azure.Storage.Common.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/System.ClientModel.dll
@@ -150,3 +145,12 @@
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Scrutor.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Swashbuckle.AspNetCore.Filters.dll
 /Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Swashbuckle.AspNetCore.Filters.Abstractions.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Postmark.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/WebApplication1.staticwebassets.runtime.json
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.UI.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/Microsoft.Extensions.FileProviders.Embedded.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/unix/lib/net6.0/System.Drawing.Common.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
+/Users/mateuszkrolik/Developer/Csharp_Net_Places_BackEnd/WebApplication1/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll

@@ -5,8 +5,8 @@ namespace WebApplication1.Services.ImageService;
 
 public interface IImageService
 {
-    Task<string> UploadImageAsync(string name, Stream imageStream, string contentType);
-    Task DeleteImageAsync(string name);
+    public Task<string> UploadImageAsync(string containerName, string name, Stream imageStream, string contentType);    
+    public Task DeleteImageAsync(string containerName, string name);
 
-    Task<(Stream imageStream, string contentType)> GetImageAsync(string name);
+    public Task<(Stream imageStream, string contentType)> GetImageAsync(string containerName, string name);
 }

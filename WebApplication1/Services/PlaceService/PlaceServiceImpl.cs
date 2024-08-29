@@ -13,15 +13,16 @@ namespace WebApplication1.Services
         private readonly DataContext _context;
         private readonly ICoordinatesService _coordinatesService;
         private readonly IImageService _imageService;
-
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string? _containerName;
 
-        public PlaceServiceImpl(DataContext context, ICoordinatesService coordinatesService, IImageService imageService, IHttpContextAccessor httpContextAccessor)
+        public PlaceServiceImpl(DataContext context, ICoordinatesService coordinatesService, IImageService imageService, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _context = context;
             _coordinatesService = coordinatesService;
             _imageService = imageService;
             _httpContextAccessor = httpContextAccessor;
+            _containerName = configuration["AzureBlobStorage:PlacesContainerName"];
         }
 
         public async Task<List<Place>> GetPlaces()
@@ -64,11 +65,11 @@ namespace WebApplication1.Services
                 place.Creator = userId; // assign logged in user as creator
             }
 
-            if (image != null)
+            if (image != null && _containerName != null)
             {
                 string uniqueFileName = Guid.NewGuid().ToString();
                 using var fileStream = image.OpenReadStream();
-                var imageUrl = await _imageService.UploadImageAsync(uniqueFileName, fileStream, image.ContentType);
+                var imageUrl = await _imageService.UploadImageAsync(_containerName, uniqueFileName, fileStream, image.ContentType);
                 place.ImageUrl = imageUrl;
             }
 
@@ -103,18 +104,18 @@ namespace WebApplication1.Services
                         place.Address = updatedPlace.Address ?? place.Address;
                         place.Creator = updatedPlace.Creator ?? place.Creator;
                         place.ImageUrl = updatedPlace.ImageUrl ?? place.ImageUrl;
-                        if (image != null)
+                        if (image != null && _containerName != null)
                         {
                             // unlink existing image
                             if (!string.IsNullOrEmpty(place.ImageUrl))
                             {
                                 var oldImageName = new Uri(place.ImageUrl).Segments.Last();
-                                await _imageService.DeleteImageAsync(oldImageName);
+                                await _imageService.DeleteImageAsync(_containerName, oldImageName);
                             }
                             // upload new image
                             string uniqueFileName = Guid.NewGuid().ToString();
                             using var fileStream = image.OpenReadStream();
-                            var imageUrl = await _imageService.UploadImageAsync(uniqueFileName, fileStream, image.ContentType);
+                            var imageUrl = await _imageService.UploadImageAsync(_containerName, uniqueFileName, fileStream, image.ContentType);
                             place.ImageUrl = imageUrl;
                         }
                         if (!string.IsNullOrEmpty(updatedPlace.Address))
@@ -150,10 +151,10 @@ namespace WebApplication1.Services
                     if (place.Creator == userId)
                     {
                         // unlink existing image
-                        if (!string.IsNullOrEmpty(place.ImageUrl))
+                        if (!string.IsNullOrEmpty(place.ImageUrl) && _containerName != null)
                         {
                             var oldImageName = new Uri(place.ImageUrl).Segments.Last();
-                            await _imageService.DeleteImageAsync(oldImageName);
+                            await _imageService.DeleteImageAsync(_containerName, oldImageName);
                         }
                         _context.Places.Remove(place);
                         await _context.SaveChangesAsync();

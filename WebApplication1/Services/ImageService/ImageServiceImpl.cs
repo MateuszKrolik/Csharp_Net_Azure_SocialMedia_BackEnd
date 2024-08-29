@@ -6,43 +6,62 @@ namespace WebApplication1.Services.ImageService
     public class ImageServiceImpl : IImageService
     {
         private readonly BlobServiceClient _blobServiceClient;
-        private readonly string? _containerName;
+        private readonly HashSet<string> _allowedImageContentTypes = new()
+        {
+            "image/jpg",
+            "image/jpeg",
+            "image/png",
+        };
+
+        private readonly Dictionary<string, string> _contentTypeToExtension = new()
+        {
+            { "image/jpg", ".jpg" },
+            { "image/jpeg", ".jpeg" },
+            { "image/png", ".png" },
+        };
 
         public ImageServiceImpl(IConfiguration configuration)
         {
-            var connectionString = configuration["AZURE_BLOB_STORAGE_CONNECTION_STRING"];
-            var containerName = configuration["AZURE_BLOB_STORAGE_CONTAINER_NAME"];
+            var connectionString = configuration["AzureBlobStorage:ConnectionString"];
             _blobServiceClient = new BlobServiceClient(connectionString);
-            _containerName = containerName;
         }
 
-        public async Task<string> UploadImageAsync(string name, Stream imageStream, string contentType)
+        public async Task<string> UploadImageAsync(string containerName, string name, Stream imageStream, string contentType)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
-            var blobClient = containerClient.GetBlobClient(name);
+            if (_allowedImageContentTypes.Contains(contentType))
+            {
+                var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+                var extension = _contentTypeToExtension[contentType];
+                var blobClient = containerClient.GetBlobClient(name + extension);
 
-            await blobClient.UploadAsync(imageStream, new BlobHttpHeaders { ContentType = contentType });
-            return blobClient.Uri.ToString();
+                await blobClient.UploadAsync(imageStream, new BlobHttpHeaders { ContentType = contentType });
+                return blobClient.Uri.ToString();
+            }
+            else
+            {
+                throw new InvalidOperationException($"Invalid image content type: {contentType}");
+            }
         }
 
-        public async Task DeleteImageAsync(string name)
+        public async Task DeleteImageAsync(string containerName, string name)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             var blobClient = containerClient.GetBlobClient(name);
 
             await blobClient.DeleteIfExistsAsync();
+
         }
 
-        public async Task<(Stream imageStream, string contentType)> GetImageAsync(string name)
+        public async Task<(Stream imageStream, string contentType)> GetImageAsync(string containerName, string name)
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             var blobClient = containerClient.GetBlobClient(name);
 
             var response = await blobClient.DownloadAsync();
             var contentType = response.Value.Details.ContentType;
             return (response.Value.Content, contentType);
         }
-
     }
 
 }

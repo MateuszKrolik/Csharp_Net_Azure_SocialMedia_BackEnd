@@ -22,7 +22,7 @@ namespace WebApplication1.Services.CoordinatesService
         public async Task<Location> GetCoordinatesForAddressAsync(string address)
         {
 
-            string? apiKey = _configuration["GOOGLE_MAPS_API_KEY"];
+            string? apiKey = _configuration["GoogleMaps:ApiKey"];
             string? baseUrl = _configuration["GoogleMaps:BaseUrl"];
             string url = $"{baseUrl}?address={Uri.EscapeDataString(address)}&key={apiKey}";
 
